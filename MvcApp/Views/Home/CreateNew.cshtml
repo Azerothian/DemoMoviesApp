@@ -1,0 +1,75 @@
+﻿@model MvcApp.Models.CreateMovieDataRequest
+@using MvcApp.Util
+<script>
+  //$(function () {
+  //  $('span.field-validation-valid, span.field-validation-error').each(function () {
+  //    $(this).addClass('help-block');
+  //  });
+  //  var $form = $('form');
+  //  var $validate = $form.validate();
+  //  var errorClass = "has-error";
+  //  $validate.settings.errorClass = errorClass;
+  //  var previousEPMethod = $validate.settings.errorPlacement;
+  //  $validate.settings.errorPlacement = $.proxy(function (error, inputElement) {
+  //    if (previousEPMethod) {
+  //      previousEPMethod(error, inputElement);
+  //    }
+  //    inputElement.parent().addClass(errorClass);
+  //  }, $form[0]);
+  //  var previousSuccessMethod = $validate.settings.success;
+  //  $validate.settings.success = $.proxy(function (error) {
+  //    //we first need to remove the class, cause the unobtrusive success method removes the node altogether
+  //    error.parent().parent().removeClass(errorClass);
+  //    if (previousSuccessMethod) {
+  //      previousSuccessMethod(error);
+  //    }
+  //  });
+  //});
+</script>
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    @using (Html.BeginForm("CreateNew", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+      @Html.AntiForgeryToken()
+      if (!ViewData.ModelState.IsValid) {
+        @Html.ValidationSummary("", new { @class = "alert alert-danger" })
+      }
+      <fieldset>
+        <legend>Create New</legend>
+        <div class="form-group @Html.ValidationErrorFor(model => model.Title, "has-error") ">
+          @Html.LabelFor(model => model.Title, new { @class = "col-sm-3 control-label required" })
+          <div class="col-sm-9">
+            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @placeholder = "Title" })
+          </div>
+        </div>
+        <div class="form-group">
+          @Html.LabelFor(model => model.Genre, new { @class = "col-sm-3 control-label" })
+          <div class="col-sm-9">
+            @Html.TextBoxFor(model => model.Genre, new { @class = "form-control", @placeholder = "Genre" })
+          </div>
+        </div>
+        <div class="form-group">
+          @Html.LabelFor(model => model.Classification, new { @class = "col-sm-3 control-label" })
+          <div class="col-sm-9">
+            @Html.TextBoxFor(model => model.Classification, new { @class = "form-control", @placeholder = "Classification" })
+          </div>
+        </div>
+        <div class="form-group">
+          @Html.LabelFor(model => model.Rating, new { @class = "col-sm-3 control-label" })
+          <div class="col-sm-9 text-center">
+            @Html.Kendo().SliderFor(model => model.Rating)
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <div class="pull-right">
+              <button type="submit" id="btnSubmit" class="btn btn-primary">Create</button>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    }
+  </div>
+</div>
