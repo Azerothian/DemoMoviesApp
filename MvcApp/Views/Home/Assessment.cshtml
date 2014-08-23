@@ -14,7 +14,7 @@
   </div>
 </div>
 <script>
-
+  var lock = false;
   function getCastByID(id, next) {
     $.ajax({
       type: "GET",
@@ -32,6 +32,9 @@
       modal: true,
       open: function () {
         next(castWindow);
+      },
+      close: function () {
+        lock = false;
       }
     })
     $(castWindow).data("kendoWindow").center().open();
@@ -47,6 +50,9 @@
   }
 
   function showModal(e) {
+    if (lock)
+      return
+    lock = true;
     var selectedId = $($(this.select()[0]).find("td")[0]).html()
     getCastByID(selectedId, function (data) {
       //console.log("getCastByID", data);

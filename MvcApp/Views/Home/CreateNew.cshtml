@@ -31,11 +31,12 @@
     @using (Html.BeginForm("CreateNew", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
       @Html.AntiForgeryToken()
-      if (!ViewData.ModelState.IsValid) {
+      if (!ViewData.ModelState.IsValid)
+      {
         @Html.ValidationSummary("", new { @class = "alert alert-danger" })
       }
       <fieldset>
-        <legend>Create New</legend>
+        <legend>@ViewBag.Title</legend>
         <div class="form-group @Html.ValidationErrorFor(model => model.Title, "has-error") ">
           @Html.LabelFor(model => model.Title, new { @class = "col-sm-3 control-label required" })
           <div class="col-sm-9">
@@ -55,13 +56,45 @@
           </div>
         </div>
         <div class="form-group">
+          @Html.LabelFor(model => model.ReleaseDate, "Release Date", new { @class = "col-sm-3 control-label" })
+          <div class="col-sm-9">
+            @Html.TextBoxFor(model => model.ReleaseDate, new { @class = "form-control numeric", @placeholder = "Release Date", @size = 4 })
+          </div>
+        </div>
+        <div class="form-group">
           @Html.LabelFor(model => model.Rating, new { @class = "col-sm-3 control-label" })
           <div class="col-sm-9 text-center">
             @Html.Kendo().SliderFor(model => model.Rating)
           </div>
         </div>
-      </fieldset>
-      <fieldset>
+        <h4>Cast</h4>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <div class="input-group">
+              <input type="text" class="txtAddCast form-control" placeholder="Add Cast member">
+              <span class="input-group-btn">
+                <button class="btnAddCast btn btn-default" type="button">Add</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9 castMembers">
+            @if (Model != null && Model.Cast != null)
+            {
+              foreach (string c in Model.Cast)
+              {
+                       <div class="input-group">
+                      <input name='Cast' id='Cast' type='text' value='@c' class='form-control' readonly="readonly" />
+                      <span class="input-group-btn">
+                        <button class="btnRemoveCast btn btn-default" type="button">Remove</button>
+                      </span>
+                    </div>
+
+              }
+            }
+          </div>
+        </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <div class="pull-right">
@@ -73,3 +106,25 @@
     }
   </div>
 </div>
+
+<script>
+  function removeCast(e) {
+    $(this).parents("list-group-item").remove()
+  }
+  $(function () {
+    $(".btnRemoveCast").click(removeCast);
+
+    $(".numeric").numeric({ decimal: false, negative: false })
+    $(".btnAddCast").click(function (e) {
+      e.preventDefault();
+      var txtAddCast = $(".txtAddCast").val()
+
+      html = $("<div class='input-group'><input name='Cast' id='Cast' type='text' value='" + txtAddCast + "' class='form-control' readonly='readonly' /><span class='input-group-btn'></span></div>");
+      button = $("<button class='btnRemoveCast btn btn-default' type='button'>Remove</button>").click(removeCast);
+      $(html).find(".input-group-btn").append(button)
+      $(".castMembers").append(html);
+      $(".txtAddCast").val("")
+    })
+
+  })
+</script>

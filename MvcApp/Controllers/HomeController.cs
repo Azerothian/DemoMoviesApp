@@ -1,6 +1,7 @@
 ﻿using MvcApp.Models;
 using MvcApp.Util;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -32,8 +33,13 @@ namespace MvcApp.Controllers
 
     public ActionResult CreateNew()
     {
-      ViewBag.Title = "CreateNew";
-
+      ViewBag.Title = "Create New Movie";
+      ViewBag.ReleaseYears = (from val in Enumerable.Range(1890, DateTime.Now.Year - 1889)
+                              select new Kendo.Mvc.UI.DropDownListItem()
+                              {
+                                Text = val.ToString(),
+                                Value = val.ToString()
+                              }) as IEnumerable;
       return View();
     }
     [HttpPost]
@@ -42,15 +48,13 @@ namespace MvcApp.Controllers
     {
       if (ModelState.IsValid)
       {
-        var data = AutoMapper.Mapper.DynamicMap<MoviesLibrary.MovieData>(movieRequest);
-
+        var data = AutoMapper.Mapper.Map<MoviesLibrary.MovieData>(movieRequest);
+        
         int id = DataHelper.DataSource.Create(data);
         if(id > -1)
         {
           return RedirectToAction("Assessment");
         }
-
-
       }
       return View(movieRequest);
     }

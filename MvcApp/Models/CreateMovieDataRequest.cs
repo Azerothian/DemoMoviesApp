@@ -14,6 +14,6 @@ namespace MvcApp.Models
     public string Classification { get; set; }
     public int Rating { get; set; }
     public string[] Cast { get; set; }
-
+    public int? ReleaseDate { get; set; }
   }
 }
